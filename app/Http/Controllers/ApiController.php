@@ -59,10 +59,10 @@ class ApiController extends Controller
             'numeroCarteira' => 17,
             'numeroVariacaoCarteira' => 35,
             'codigoModalidade' => 1,
-            //'dataEmissao' => '09.02.2021',
-            'dataEmissao' => date('d.m.Y', strtotime('now')),
-            //'dataVencimento' => '12.02.2021',
-            'dataVencimento' => date('d.m.Y', strtotime('+7 days', strtotime('now'))),
+            'dataEmissao' => '09.02.2021',
+            'dataVencimento' => '12.02.2021',
+            //'dataEmissao' => date('d.m.Y', strtotime('now')),
+            //'dataVencimento' => date('d.m.Y', strtotime('+7 days', strtotime('now'))),
             'valorOriginal' => 123.50,
             'valorAbatimento' => 0,
             'quantidadeDiasProtesto' => 0,
@@ -76,7 +76,7 @@ class ApiController extends Controller
             'textoCampoUtilizacaoBeneficiario' => 'TESTE',
             'codigoTipoContaCaucao' => 0,
             'numeroTituloCliente' => '00031285579999990099',
-            'textoMensagemBloquetoOcorrencia' => 'TESTE',
+            'textoMensagemBloquetoOcorrencia' => 'AAAAAAAA',
             'pagador' => array(
                 'tipoRegistro' => 1,
                 'numeroRegistro' => 71128590182,
@@ -130,18 +130,161 @@ class ApiController extends Controller
     }
 
     public function listar(){
-        
+        try {
+            $guzzle = new Client([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token(),
+                    'Content-Type' => 'application/json',
+                ],
+                'verify' => false
+            ]);
+
+            /* Requisição */
+            $response = $guzzle->request('GET', 'https://api.hm.bb.com.br/cobrancas/v1/boletos?gw-dev-app-key='. config('apiCobranca.gw_dev_app_key') .
+                '&agenciaBeneficiario=' . '452' .
+                '&contaBeneficiario=' . '123873' .
+                '&indicadorSituacao=' . 'B' .
+                '&indice=' . '300' .
+                '&codigoEstadoTituloCobranca=' . '7' .
+                '&dataInicioMovimento=' . '01.01.2021' .
+                '&dataFimMovimento=' . '09.02.2021'
+            );
+
+            /* Recuperar o corpo da resposta da requisição */
+            $body = $response->getBody();
+
+            /* Acessar as dados da resposta - JSON */
+            $contents = $body->getContents();
+
+            /* Converter o JSON em array associativo do PHP */
+            $boletos = json_decode($contents);
+
+            dd($boletos);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+
     }
 
     public function consultar(){
-        
+        $id = '00031285579999990005';
+        try {
+            $guzzle = new Client([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token(),
+                    'Content-Type' => 'application/json',
+                ],
+                'verify' => false
+            ]);
+
+            /* Requisição */
+            $response = $guzzle->request('GET', 'https://api.hm.bb.com.br/cobrancas/v1/boletos/'.
+                $id .
+                '?gw-dev-app-key=' . config('apiCobranca.gw_dev_app_key') .
+                '&numeroConvenio=' .'3128557'
+            );
+
+            /* Recuperar o corpo da resposta da requisição */
+            $body = $response->getBody();
+
+            /* Acessar as dados da resposta - JSON */
+            $contents = $body->getContents();
+
+            /* Converter o JSON em array associativo do PHP */
+            $boleto = json_decode($contents);
+
+            dd($boleto);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function baixar(){
-        
+        $id = '00031285579999990005';
+
+        try {
+            $guzzle = new Client([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token(),
+                    'Content-Type' => 'application/json',
+                ],
+                'verify' => false
+            ]);
+
+            /* Requisição */
+            $response = $guzzle->request('POST', 'https://api.hm.bb.com.br/cobrancas/v1/boletos/'. 
+                $id . '/baixar?gw-dev-app-key=' . config('apiCobranca.gw_dev_app_key'),
+                [
+                    'body' => json_encode([
+                        'numeroConvenio' => 3128557
+                    ])
+                ]
+            );
+
+            /* Recuperar o corpo da resposta da requisição */
+            $body = $response->getBody();
+
+            /* Acessar as dados da resposta - JSON */
+            $contents = $body->getContents();
+
+            /* Converter o JSON em array associativo do PHP */
+            $boleto = json_decode($contents);
+
+            dd($boleto);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function atualizar(){
-        
+        $id = '00031285579999990005';
+
+        /* Atributos que serão alterados */
+        $dados = array(
+            'numeroConvenio' => 3128557,
+            'indicadorNovaDataVencimento' => 'S',
+            'alteracaoData' => array(
+                'novaDataVencimento' => '20.05.2021'
+            )
+        );
+
+        /* Converte array em json */
+         $dados = json_encode($dados); 
+
+
+        try {
+            $guzzle = new Client([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token(),
+                    'Content-Type' => 'application/json'
+                ],
+                'verify' => false,
+               
+            ]);
+
+            /* Requisição */
+            $response = $guzzle->request('PATCH', 'https://api.hm.bb.com.br/cobrancas/v1/boletos/'.$id.'?gw-dev-app-key='. config('apiCobranca.gw_dev_app_key'),
+                [
+                    'body' => $dados
+                ]
+            );
+
+            /* Recuperar o corpo da resposta da requisição */
+            $body = $response->getBody();
+
+            /* Acessar as dados da resposta - JSON */
+            $contents = $body->getContents();
+
+            /* Converter o JSON em array associativo do PHP */
+            $boleto = json_decode($contents);
+
+            dd($boleto);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }

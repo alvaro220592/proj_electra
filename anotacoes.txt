@@ -29,3 +29,5 @@ Registro de boleto:
 
 Listagem de boletos:
 
+Consulta:
+    dá pra buscar o boleto pelo numero
