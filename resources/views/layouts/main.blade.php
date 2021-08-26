@@ -27,8 +27,15 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ route('index') }}">Home</a>
+                  <a class="nav-link active" aria-current="page" href="{{ route('index') }}">Home</a>
               </li>
+
+              <form action="/logout" method="post">
+                @csrf
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/logout"  onclick="event.preventDefault(); this.closest('form').submit();">Sair</a>
+                </li>
+              </form>
             </ul>
           </div>
         </div>
