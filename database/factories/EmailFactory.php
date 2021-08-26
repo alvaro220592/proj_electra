@@ -22,8 +22,8 @@ class EmailFactory extends Factory
     public function definition()
     {
         return [
-            'email' => 'fulano@gmail.com',
-            'client_id' => 1,
+            'email' => 'cliente@gmail.com',
+            'client_id' => 3,
         ];
     }
 }

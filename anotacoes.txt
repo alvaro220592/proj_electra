@@ -1,0 +1,31 @@
+O serviço de boleto usado é a API do Banco do Brasil
+
+    dados ficticios para testes: https://apoio.developers.bb.com.br/referency/post/5ffc477c3b02bd0012ecaa1a
+
+foram instaladas as dependencias da API GUZZLE: https://packagist.org/packages/guzzlehttp/guzzle
+
+    composer require guzzlehttp/guzzle
+
+Credenciais:
+    foram inseridas variáveis de ambiente no final do .env do projeto
+
+    Foi criado um arquivo em /config chamado apiCobranca.php. O controller acessará esse arquivo, que pos sua vez acessará o .env
+
+Criação do ApiController
+    Foram criados os esqueletos dos métodos
+
+Criação das rotas
+    Foram criadas as rotas referentes a cada método do ApiController
+
+Geração de token
+    É necessário importar a bibioteca Guzzle:
+        use GuzzleHttp\Client;
+
+    Foi criado o corpo do método 'token()'
+
+Registro de boleto:
+    O número do título tem que ser incrementado a cada registro de boleto
+    O que está em mauísculo, precisa continuar maiúsculo
+
+Listagem de boletos:
+

@@ -25,6 +25,20 @@
         <div class="row">
 
             <div class="col-md-3">
+                <label for="cpf">CPF</label>
+                <input type="text" class="form-control" name="cpf" value="{{ old('cpf') }}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="service">Serviço</label>
+                <input type="text" name="service" class="form-control">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
                 <label for="phone">Telefone</label>
                 <input type="text"  name="phone" class="form-control">
             </div>

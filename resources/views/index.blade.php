@@ -11,6 +11,8 @@
                     <th>#</th>
                     <th>Nome</th>
                     <th>Sobrenome</th>
+                    <th>CPF</th>
+                    <th>Serviço</th>
                     <th>Telefone</th>
                     <th>Email</th>
                     <th>Dia Venc.</th>
@@ -26,6 +28,8 @@
                             <td>{{ $client->id }}</td>
                             <td>{{ $client->name }}</td>
                             <td>{{ $client->lastname }}</td>
+                            <td>{{ $client->cpf }}</td>
+                            <td>{{ $client->service }}</td>
                             <td>{{ $client->phone }}</td>
                             <td>{{ $client->email }}</td>
                             <td>{{ $client->due_day }}</td>
@@ -48,6 +52,8 @@
                     @endforeach
                 @else
                     <tr>
+                        <td>-</td>
+                        <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>

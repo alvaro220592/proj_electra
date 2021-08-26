@@ -22,6 +22,8 @@ class ClientController extends Controller
             'clients.id',
             'clients.name',
             'clients.lastname',
+            'clients.cpf',
+            'clients.service',
             'clients.due_day',
             'clients.amount',
             'phones.phone',
@@ -56,6 +58,8 @@ class ClientController extends Controller
 
         $client->name = $request->name;
         $client->lastname = $request->lastname;
+        $client->cpf = $request->cpf;
+        $client->service = $request->service;
         $client->due_day = $request->due_day;
         $client->amount = $request->amount;
         $client->save();
@@ -100,6 +104,8 @@ class ClientController extends Controller
             'clients.id',
             'clients.name',
             'clients.lastname',
+            'clients.cpf',
+            'clients.service',
             'clients.due_day',
             'clients.amount',
             'phones.phone',
@@ -122,6 +128,8 @@ class ClientController extends Controller
 
         $client->name = $request->name;
         $client->lastname = $request->lastname;
+        $client->cpf = $request->cpf;
+        $client->service = $request->service;
         $client->due_day = $request->due_day;
         $client->amount = $request->amount;
         $client->update();
@@ -152,11 +160,17 @@ class ClientController extends Controller
 
     public function enviar(){
 
-        $clients_hoje = Client::where('due_day', 26)->get();
+        $clients_hoje = Client::where('due_day', date('d'))->get();
 
-        /* foreach($clients_hoje as $cli){
-            echo $cli->name;
-        } */
-        dd($clients_hoje);
+        echo date('d.m.Y', strtotime('now')) . "<br>";
+        echo date('d.m.Y', strtotime('+7 days', strtotime('now'))) . "<br>";
+
+        foreach($clients_hoje as $cli){
+            echo 
+            "Nome: $cli->name $cli->lastname<br>
+            CPF: $cli->cpf
+            <hr>";
+        }
+        //dd($clients_hoje);
     }
 }

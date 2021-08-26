@@ -22,10 +22,30 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'name' => 'Cliente',
-            'lastname' => 'Fulano',
+            
+            'name' => 'VALERIO DE AGUIAR',
+            'lastname' => 'ZORZATO',
+            'cpf' => '96050176876',
+            'service' => 'Prestação de serviços',
             'due_day' => 10,
             'amount' => 200,
+        
+        
+            /* 'name' => 'JOAO DA COSTA',
+            'lastname' => 'ANTUNES',
+            'cpf' => '88398158808',
+            'service' => 'Prestação de serviços',
+            'due_day' => 10,
+            'amount' => 200, */
+        
+    
+            /* 'name' => 'VALERIO ALVES',
+            'lastname' => 'BARROS',
+            'cpf' => '71943984190',
+            'service' => 'Prestação de serviços',
+            'due_day' => 10,
+            'amount' => 200, */
+            
         ];
     }
 }

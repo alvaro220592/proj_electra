@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group( function(){
     Route::post('/clients/delete/{id}', [ClientController::class, 'destroy']);
 
     Route::post('/clients/enviar', [ClientController::class, 'enviar']);
+
+    // API
+    Route::get('token', [ApiController::class, 'token'])->name('token');
+
+    Route::get('registrar', [ApiController::class, 'registrar'])->name('registrar');
+
+    Route::get('listar', [ApiController::class, 'listar'])->name('listar');
+
+    Route::get('consultar', [ApiController::class, 'consultar'])->name('consultar');
+
+    Route::get('baixar', [ApiController::class, 'baixar'])->name('baixar');
+
+    Route::get('atualizar', [ApiController::class, 'atualizar'])->name('atualizar');
 });

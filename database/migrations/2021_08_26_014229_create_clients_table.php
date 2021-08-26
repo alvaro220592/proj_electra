@@ -18,6 +18,8 @@ class CreateClientsTable extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('lastname');
+            $table->string('cpf');
+            $table->string('service');
             $table->integer('due_day');
             $table->decimal('amount');
         });
