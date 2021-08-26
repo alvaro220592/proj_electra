@@ -8,6 +8,7 @@
         <table class="table table-dark">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Nome</th>
                     <th>Sobrenome</th>
                     <th>Telefone</th>
@@ -22,6 +23,7 @@
                 @if(count($clients) > 0)
                     @foreach($clients as $client)
                         <tr class="text-nowrap">
+                            <td>{{ $client->id }}</td>
                             <td>{{ $client->name }}</td>
                             <td>{{ $client->lastname }}</td>
                             <td>{{ $client->phone }}</td>
@@ -53,6 +55,7 @@
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>-</td>
                     </tr>
                 @endif
             </tbody>
@@ -68,6 +71,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <form action="/clients/enviar" method="post">
+                                @csrf
                                 <button id="btn-sim" class="btn btn-dark form-control" type="submit">Sim</button>
                             </form>
                         </div>
@@ -78,6 +82,10 @@
                     </div>
                 </div>
             </div>
+            {{ date('d') }}
+           
+            
+
         @endif
     </div>
 @endsection

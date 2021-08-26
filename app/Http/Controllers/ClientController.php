@@ -118,25 +118,6 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /* $client = Client::findOrFail($id);
-
-        $client->name = $request->name;
-        $client->lastname = $request->lastname;
-        $client->due_day = $request->due_day;
-        $client->amount = $request->amount;
-        $client->update();
-        
-        $phone = $client->phone;
-        $phone->phone = $request->phone;
-        $phone->client_id = $client->id;
-        $phone->update();
-        
-        
-        $email = $client->email;
-        $email->email = $request->email;
-        $email->client_id = $client->id;
-        $email->update(); */
-
         $client = Client::findOrFail($id);
 
         $client->name = $request->name;
@@ -167,5 +148,15 @@ class ClientController extends Controller
         Client::findOrFail($id)->delete();
 
         return redirect('/');
+    }
+
+    public function enviar(){
+
+        $clients_hoje = Client::where('due_day', 26)->get();
+
+        /* foreach($clients_hoje as $cli){
+            echo $cli->name;
+        } */
+        dd($clients_hoje);
     }
 }
