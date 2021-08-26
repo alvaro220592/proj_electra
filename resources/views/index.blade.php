@@ -28,8 +28,18 @@
                         <td>{{ $client->due_day }}</td>
                         <td>{{ $client->amount }}</td>
                         <td>
-                            <ion-icon name="refresh-outline" class='icons'></ion-icon>
-                            <ion-icon name="close-circle-outline" class='icons'></ion-icon>
+                            <div class="d-flex">
+                                <a href="clients/edit/{{ $client->id }}">
+                                    <ion-icon name="refresh-outline" class='icons text-decoration-none'></ion-icon>
+                                </a>
+                                <form action="clients/delete/{{ $client->id }}" method="post" class=''>
+                                    @csrf
+                                    {{-- @method('DELETE') --}}
+                                    <button type="submit" class="bg-transparent border-0">
+                                        <ion-icon name="close-circle-outline" class='icons'></ion-icon>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

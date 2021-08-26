@@ -19,6 +19,7 @@ class ClientController extends Controller
         $clients = Client::join('phones', 'phones.client_id', 'clients.id')
         ->join('emails', 'emails.client_id', 'clients.id')
         ->select(
+            'clients.id',
             'clients.name',
             'clients.lastname',
             'clients.due_day',
@@ -90,9 +91,22 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Client $client)
+    public function edit($id)
     {
-        //
+        $client = Client::where('clients.id', $id)
+        ->join('phones', 'phones.client_id', 'clients.id')
+        ->join('emails', 'emails.client_id', 'clients.id')
+        ->select(
+            'clients.id',
+            'clients.name',
+            'clients.lastname',
+            'clients.due_day',
+            'clients.amount',
+            'phones.phone',
+            'emails.email'
+        )->first();
+
+        return view('clients.edit', ['client' => $client]);
     }
 
     /**
@@ -102,9 +116,44 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, $id)
     {
-        //
+        /* $client = Client::findOrFail($id);
+
+        $client->name = $request->name;
+        $client->lastname = $request->lastname;
+        $client->due_day = $request->due_day;
+        $client->amount = $request->amount;
+        $client->update();
+        
+        $phone = $client->phone;
+        $phone->phone = $request->phone;
+        $phone->client_id = $client->id;
+        $phone->update();
+        
+        
+        $email = $client->email;
+        $email->email = $request->email;
+        $email->client_id = $client->id;
+        $email->update(); */
+
+        $client = Client::findOrFail($id);
+
+        $client->name = $request->name;
+        $client->lastname = $request->lastname;
+        $client->due_day = $request->due_day;
+        $client->amount = $request->amount;
+        $client->update();
+
+        $phone = Phone::where('client_id', $id)->first();
+        $phone->phone = $request->phone;
+        $phone->update();
+
+        $email = Email::where('client_id', $id)->first();
+        $email->email = $request->email;
+        $email->update();
+        
+        return redirect('/');
     }
 
     /**
@@ -113,8 +162,10 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        //
+        Client::findOrFail($id)->delete();
+
+        return redirect('/');
     }
 }

@@ -30,5 +30,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group( function(){
 
     Route::get('/clients/cadastro-post', [ClientController::class, 'create'])->name('clients/cadastro-post');
 
-    Route::post('clients/store', [ClientController::class, 'store'])->name('clients/store');
+    Route::post('/clients/store', [ClientController::class, 'store'])->name('clients/store');
+
+    Route::get('/clients/edit/{id}', [ClientController::class, 'edit'])->name('clients/edit');
+
+    Route::put('/clients/update/{id}', [ClientController::class, 'update']);
+
+    Route::post('/clients/delete/{id}', [ClientController::class, 'destroy']);
 });

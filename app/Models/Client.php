@@ -13,11 +13,11 @@ class Client extends Model
         'name', 'lastname', 'due_day', 'amount'
     ];
 
-    public function phones(){
-        return $this->hasMany(Phone::class);
+    public function phone(){
+        return $this->hasOne(Phone::class);
     }
 
-    public function emails(){
-        return $this->hasMany(Email::class);
+    public function email(){
+        return $this->hasOne(Email::class);
     }
 }
