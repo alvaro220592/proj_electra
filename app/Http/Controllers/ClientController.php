@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Models\Phone;
+use App\Models\Email;
 
 class ClientController extends Controller
 {
@@ -14,7 +16,20 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::join('phones', 'phones.client_id', 'clients.id')
+        ->join('emails', 'emails.client_id', 'clients.id')
+        ->select(
+            'clients.name',
+            'clients.lastname',
+            'clients.due_day',
+            'clients.amount',
+            'phones.phone',
+            'emails.email'
+        )->get();
+
+        return view('index', [
+            'clients' => $clients,
+        ]);
     }
 
     /**
@@ -24,7 +39,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return view('clients.cadastro');
     }
 
     /**
@@ -35,7 +50,27 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $client = new Client;
+        
+
+        $client->name = $request->name;
+        $client->lastname = $request->lastname;
+        $client->due_day = $request->due_day;
+        $client->amount = $request->amount;
+        $client->save();
+        
+        $phone = new Phone;
+        $phone->phone = $request->phone;
+        $phone->client_id = $client->id;
+        $phone->save();
+        
+        
+        $email = new Email;
+        $email->email = $request->email;
+        $email->client_id = $client->id;
+        $email->save();
+
+        return redirect('/');
     }
 
     /**

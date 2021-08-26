@@ -22,7 +22,10 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => 'Cliente',
+            'lastname' => 'Fulano',
+            'due_day' => 10,
+            'amount' => 200,
         ];
     }
 }

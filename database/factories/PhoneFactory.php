@@ -22,7 +22,8 @@ class PhoneFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'phone' => '1199999999',
+            'client_id' => 1,
         ];
     }
 }

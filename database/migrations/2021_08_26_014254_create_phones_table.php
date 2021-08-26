@@ -16,6 +16,8 @@ class CreatePhonesTable extends Migration
         Schema::create('phones', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('phone');
+            $table->foreignId('client_id')->constrained();
         });
     }
 

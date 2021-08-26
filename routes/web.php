@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/* Route::get('/', function () {
+    return view('index');
+}); */
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+/* Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->name('dashboard'); */
+
+Route::middleware(['auth:sanctum', 'verified'])->group( function(){
+    
+    Route::get('/', [ClientController::class, 'index'])->name('index');
+    
+    Route::get('/clients/cadastro-get', [ClientController::class, 'create'])->name('clients/cadastro-get');
+
+    Route::get('/clients/cadastro-post', [ClientController::class, 'create'])->name('clients/cadastro-post');
+
+    Route::post('clients/store', [ClientController::class, 'store'])->name('clients/store');
+});
