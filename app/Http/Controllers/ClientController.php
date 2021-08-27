@@ -6,6 +6,12 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\Phone;
 use App\Models\Email;
+use App\Models\State;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Street;
+use App\Http\Controllers\ApiController;
+
 
 class ClientController extends Controller
 {
@@ -18,6 +24,10 @@ class ClientController extends Controller
     {
         $clients = Client::join('phones', 'phones.client_id', 'clients.id')
         ->join('emails', 'emails.client_id', 'clients.id')
+        ->join('streets', 'clients.street_id', 'streets.id')
+        ->join('districts', 'streets.district_id', 'districts.id')
+        ->join('cities', 'districts.city_id', 'cities.id')
+        ->join('states', 'cities.state_id', 'states.id')
         ->select(
             'clients.id',
             'clients.name',
@@ -26,6 +36,13 @@ class ClientController extends Controller
             'clients.service',
             'clients.due_day',
             'clients.amount',
+            'clients.num_convenio',
+            'clients.address_num',
+            'streets.street',
+            'streets.cep',
+            'districts.district',
+            'cities.city',
+            'states.uf',
             'phones.phone',
             'emails.email'
         )->get();
@@ -53,8 +70,24 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+
+        $state = new State;
+        $city = new City;
         $client = new Client;
+        $district = new District;
+        $street = new Street;
         
+        $state->firstOrCreate(['uf' => $request->uf]);
+        $state_id = State::where('uf', $request->uf)->pluck('id')->first();
+
+        $city->firstOrCreate(['city' => $request->city, 'state_id' => $state_id]);
+        $city_id = City::where('city', $request->city)->pluck('id')->first();
+
+        $district->firstOrCreate(['district' => $request->district, 'city_id' => $city_id]);
+        $district_id = District::where('district', $request->district)->pluck('id')->first();
+
+        $street->firstOrCreate(['street' => $request->street, 'cep' => $request->cep, 'district_id' => $district_id]);
+        $street_id = Street::where('street', $request->street)->pluck('id')->first();
 
         $client->name = $request->name;
         $client->lastname = $request->lastname;
@@ -62,6 +95,9 @@ class ClientController extends Controller
         $client->service = $request->service;
         $client->due_day = $request->due_day;
         $client->amount = $request->amount;
+        $client->num_convenio = $request->num_convenio;
+        $client->address_num = $request->address_num;
+        $client->street_id = $street_id;
         $client->save();
         
         $phone = new Phone;
@@ -99,7 +135,10 @@ class ClientController extends Controller
     {
         $client = Client::where('clients.id', $id)
         ->join('phones', 'phones.client_id', 'clients.id')
-        ->join('emails', 'emails.client_id', 'clients.id')
+        ->join('emails', 'emails.client_id', 'clients.id')->join('streets', 'clients.street_id', 'streets.id')
+        ->join('districts', 'streets.district_id', 'districts.id')
+        ->join('cities', 'districts.city_id', 'cities.id')
+        ->join('states', 'cities.state_id', 'states.id')
         ->select(
             'clients.id',
             'clients.name',
@@ -108,6 +147,13 @@ class ClientController extends Controller
             'clients.service',
             'clients.due_day',
             'clients.amount',
+            'clients.num_convenio',
+            'streets.cep',
+            'clients.address_num',
+            'streets.street',
+            'districts.district',
+            'cities.city',
+            'states.uf',
             'phones.phone',
             'emails.email'
         )->first();
@@ -122,25 +168,17 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $client = Client::findOrFail($id);
-
-        $client->name = $request->name;
-        $client->lastname = $request->lastname;
-        $client->cpf = $request->cpf;
-        $client->service = $request->service;
-        $client->due_day = $request->due_day;
-        $client->amount = $request->amount;
-        $client->update();
-
-        $phone = Phone::where('client_id', $id)->first();
-        $phone->phone = $request->phone;
-        $phone->update();
-
-        $email = Email::where('client_id', $id)->first();
-        $email->email = $request->email;
-        $email->update();
+        $data = $request->all();
+        
+        Client::findOrFail($request->id)->update($data);
+        Phone::findOrFail($request->id)->update($data);
+        Email::findOrFail($request->id)->update($data);
+        Street::findOrFail($request->id)->update($data);
+        District::findOrFail($request->id)->update($data);
+        City::findOrFail($request->id)->update($data);
+        State::findOrFail($request->id)->update($data);
         
         return redirect('/');
     }
@@ -160,17 +198,36 @@ class ClientController extends Controller
 
     public function enviar(){
 
-        $clients_hoje = Client::where('due_day', date('d'))->get();
+        $boleto = new ApiController;
 
-        echo date('d.m.Y', strtotime('now')) . "<br>";
-        echo date('d.m.Y', strtotime('+7 days', strtotime('now'))) . "<br>";
+        $clients_hoje = Client::where('due_day', date('d'))
+        ->join('phones', 'phones.client_id', 'clients.id')
+        ->join('emails', 'emails.client_id', 'clients.id')->join('streets', 'clients.street_id', 'streets.id')
+        ->join('districts', 'streets.district_id', 'districts.id')
+        ->join('cities', 'districts.city_id', 'cities.id')
+        ->join('states', 'cities.state_id', 'states.id')->get();
 
+        /* echo date('d.m.Y', strtotime('now')) . "<br>";
+        echo date('d.m.Y', strtotime('+7 days', strtotime('now'))) . "<br>"; */
+
+        $boletos = [];
+        /* $num_convenio, $data_emissao, $data_venc, $valor, $num_registro_cpf, $nome, $endereco, $cep, $cidade, $bairro, $uf, $tel, $email */
         foreach($clients_hoje as $cli){
-            echo 
-            "Nome: $cli->name $cli->lastname<br>
-            CPF: $cli->cpf
-            <hr>";
+            $boleto->registrarTeste(
+                $cli->num_convenio,
+                date('d.m.Y', strtotime('now')),
+                date('d.m.Y', strtotime('+7days', strtotime('now'))),
+                $cli->amount,
+                $cli->cpf,
+                $cli->name . " " . $cli->lastname,
+                $cli->street . ", " . $cli->address_num,
+                $cli->cep,
+                $cli->city,
+                $cli->district,
+                $cli->uf,
+                $cli->phone,
+                $cli->email,
+            );
         }
-        //dd($clients_hoje);
     }
 }

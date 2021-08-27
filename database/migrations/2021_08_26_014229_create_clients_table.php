@@ -22,6 +22,9 @@ class CreateClientsTable extends Migration
             $table->string('service');
             $table->integer('due_day');
             $table->decimal('amount');
+            $table->string('num_convenio');
+            $table->string('address_num');
+            $table->foreignId('street_id')->constrained()->onDelete('cascade');
         });
     }
 

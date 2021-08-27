@@ -7,7 +7,7 @@
     <div class="table-responsive">
         <table class="table table-dark">
             <thead>
-                <tr>
+                <tr class="text-nowrap">
                     <th>#</th>
                     <th>Nome</th>
                     <th>Sobrenome</th>
@@ -17,6 +17,13 @@
                     <th>Email</th>
                     <th>Dia Venc.</th>
                     <th>Valor</th>
+                    <th>nº convênio</th>
+                    <th>CEP</th>
+                    <th>Logradouro</th>
+                    <th>nº</th>
+                    <th>Bairro</th>
+                    <th>Cidade</th>
+                    <th>UF</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -34,6 +41,13 @@
                             <td>{{ $client->email }}</td>
                             <td>{{ $client->due_day }}</td>
                             <td>{{ $client->amount }}</td>
+                            <td>{{ $client->num_convenio }}</td>
+                            <td>{{ $client->cep }}</td>
+                            <td>{{ $client->street }}</td>
+                            <td>{{ $client->address_num }}</td>
+                            <td>{{ $client->district }}</td>
+                            <td>{{ $client->city }}</td>
+                            <td>{{ $client->uf }}</td>
                             <td>
                                 <div class="d-flex">
                                     <a href="clients/edit/{{ $client->id }}">
@@ -62,36 +76,43 @@
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
                     </tr>
                 @endif
             </tbody>
         </table>
-        
-        {{-- Área do envio das faturas --}}
-        @if(count($clients))
-            <div class="col-md-2">
-                <button id="btn-enviar-faturas" class="btn btn-dark form-control">Enviar faturas</button>
-                <div id="enviar-faturas-container">
-                    <p class="mt-4">Tem certeza?</p>
+    </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form action="/clients/enviar" method="post">
-                                @csrf
-                                <button id="btn-sim" class="btn btn-dark form-control" type="submit">Sim</button>
-                            </form>
-                        </div>
+    {{-- Área do envio das faturas --}}
+    @if(count($clients))
+    <div class="col-md-2">
+        <button id="btn-enviar-faturas" class="btn btn-dark form-control">Enviar faturas</button>
+        <div id="enviar-faturas-container">
+            <p class="mt-4">Tem certeza?</p>
 
-                        <div class="col-md-6">
-                            <button id="btn-nao" class="btn btn-dark form-control">Não</button>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="/clients/enviar" method="post">
+                        @csrf
+                        <button id="btn-sim" class="btn btn-dark form-control" type="submit">Sim</button>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <button id="btn-nao" class="btn btn-dark form-control">Não</button>
                 </div>
             </div>
-            {{ date('d') }}
-           
-            
-
-        @endif
+        </div>
     </div>
+    {{ date('d') }}
+   
+    
+
+    @endif
 @endsection

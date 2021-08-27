@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Email;
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class EmailFactory extends Factory
+class CityFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Email::class;
+    protected $model = City::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +22,8 @@ class EmailFactory extends Factory
     public function definition()
     {
         return [
-            'email' => 'cliente@gmail.com',
-            'client_id' => 2,
+            'city' => $this->faker->city(),
+            'state_id' => 1,
         ];
     }
 }

@@ -23,7 +23,7 @@ class PhoneFactory extends Factory
     {
         return [
             'phone' => '1199999999',
-            'client_id' => 3,
+            'client_id' => 2,
         ];
     }
 }

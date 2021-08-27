@@ -66,6 +66,57 @@
 
         <div class="row">
 
+            <div class="col-md-3">
+                <label for="num_convenio">Num convênio</label>
+                <input type="text"  name="num_convenio" class="form-control" value="3128557">
+            </div>
+
+            <div class="col-md-3">
+                <label for="cep">CEP</label>
+                <input type="text"  name="cep" id="cep" class="form-control">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <label for="street">Logradouro</label>
+                <input type="text"  name="street" id="logradouro" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label for="address_num">Nº</label>
+                <input type="text"  name="address_num" class="form-control">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <label for="district">Bairro</label>
+                <input type="text"  name="district" id="bairro" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label for="city">Cidade</label>
+                <input type="text"  name="city" id="localidade" class="form-control">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <label for="uf">UF</label>
+                <input type="text"  name="uf" id="uf" class="form-control">
+            </div>
+
+        </div>
+
+        <div class="row">
+
             <div class="col-md-6">
                 <input type="submit" value="Cadastrar" class="btn btn-dark form-control mt-2">
             </div>
@@ -73,5 +124,13 @@
         </div>
 
     </form>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <a href="/" class="btn btn-dark form-control mt-2">Cancelar</a>
+        </div>
+
+    </div>
     
 @endsection

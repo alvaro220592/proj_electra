@@ -10,7 +10,7 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'lastname', 'due_day', 'amount'
+        'name', 'lastname', 'cpf', 'service', 'due_day', 'amount', 'num_convenio', 'address_num', 'street_id'
     ];
 
     public function phone(){

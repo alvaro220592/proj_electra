@@ -29,14 +29,19 @@ class ClientFactory extends Factory
             'service' => 'Prestação de serviços',
             'due_day' => 10,
             'amount' => 200,
-        
+            'num_convenio' => '9785867',
+            'address_num' => rand(3, 1000),
+            'street_id' => 1
         
             /* 'name' => 'JOAO DA COSTA',
             'lastname' => 'ANTUNES',
             'cpf' => '88398158808',
             'service' => 'Prestação de serviços',
             'due_day' => 10,
-            'amount' => 200, */
+            'amount' => 200,
+            'num_convenio' => '9785888',
+            'address_num' => rand(3, 1000),
+            'street_id' => 2 */
         
     
             /* 'name' => 'VALERIO ALVES',
@@ -44,7 +49,10 @@ class ClientFactory extends Factory
             'cpf' => '71943984190',
             'service' => 'Prestação de serviços',
             'due_day' => 10,
-            'amount' => 200, */
+            'amount' => 200,
+            'num_convenio' => '9785000',
+            'address_num' => rand(3, 1000),
+            'street_id' => 3 */
             
         ];
     }

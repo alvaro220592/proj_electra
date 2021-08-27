@@ -129,6 +129,81 @@ class ApiController extends Controller
         }
     }
 
+    public function registrarTeste($num_convenio, $data_emissao, $data_venc, $valor, $num_registro_cpf, $nome, $endereco, $cep, $cidade, $bairro, $uf, $tel, $email ){
+        /* Informações do Boleto */
+        $body = array(
+            'numeroConvenio' => $num_convenio,
+            'numeroCarteira' => 17,
+            'numeroVariacaoCarteira' => 35,
+            'codigoModalidade' => 1,
+            'dataEmissao' => $data_emissao,
+            'dataVencimento' => $data_venc,
+            'valorOriginal' => $valor,
+            'valorAbatimento' => 0,
+            'quantidadeDiasProtesto' => 0,
+            'indicadorNumeroDiasLimiteRecebimento' => 'N',
+            'numeroDiasLimiteRecebimento' => 0,
+            'codigoAceite' => 'A',
+            'codigoTipoTitulo' => 4,
+            'descricaoTipoTitulo' => 'DS',
+            'indicadorPermissaoRecebimentoParcial' => 'N',
+            'numeroTituloBeneficiario' => '000101',
+            'textoCampoUtilizacaoBeneficiario' => 'TESTE',
+            'codigoTipoContaCaucao' => 0,
+            'numeroTituloCliente' => '000312855799999' . rand(10000, 19999),
+            'textoMensagemBloquetoOcorrencia' => 'AAAAAAAA',
+            'pagador' => array(
+                'tipoRegistro' => 1,
+                'numeroRegistro' => $num_registro_cpf,
+                'nome' => $nome,
+                'endereco' => $endereco,
+                'cep' => $cep,
+                'cidade' => $cidade,
+                'bairro' => $bairro,
+                'uf' => $uf,
+                'telefone' => $tel            ),
+            'email' => $email
+        );
+
+		/* Converte array em json */
+        $body = json_encode($body);
+
+        var_dump($body);
+        echo "<br><br>";
+
+        try {
+            $guzzle = new Client([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token(),
+                    'Content-Type' => 'application/json',
+                ],
+                'verify' => false
+            ]);
+
+         
+            /* Requisição */
+            $response = $guzzle->request('POST', 'https://api.hm.bb.com.br/cobrancas/v1/boletos?gw-dev-app-key='. config('apiCobranca.gw_dev_app_key'),
+                [
+                    'body' => $body
+                ]
+            );
+
+            /* Recuperar o corpo da resposta da requisição */
+            $body = $response->getBody();
+
+            /* Acessar as dados da resposta - JSON */
+            $contents = $body->getContents();
+
+            /* Conveter o JSON em array associativo PHP */
+            $boleto = json_decode($contents);
+
+            var_dump($boleto);
+
+        } catch (\Exception $e) {
+           echo $e->getMessage();
+        }
+    }
+
     public function listar(){
         try {
             $guzzle = new Client([
@@ -160,6 +235,8 @@ class ApiController extends Controller
             $boletos = json_decode($contents);
 
             dd($boletos);
+
+            
 
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -237,6 +314,7 @@ class ApiController extends Controller
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+
     }
 
     public function atualizar(){
